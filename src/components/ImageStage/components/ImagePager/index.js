@@ -81,31 +81,31 @@ const ImagePager = ({
      */
     const bind = useGesture(
         {
-            onWheel: ({
-                distance,
-                velocity,
-                direction: [xDir, yDir],
-                ctrlKey
-            }) => {
-                // Disable drag if Image has been zoomed in to allow for panning
-                if (ctrlKey || disableDrag || velocity === 0) return;
+            // onWheel: ({
+            //     distance,
+            //     velocity,
+            //     direction: [xDir, yDir],
+            //     ctrlKey
+            // }) => {
+            //     // Disable drag if Image has been zoomed in to allow for panning
+            //     if (ctrlKey || disableDrag || velocity === 0) return;
 
-                const draggedFarEnough = distance > pageWidth / 3;
-                const draggedFastEnough =
-                    velocity > 1.5 && distance <= pageWidth / 3;
+            //     const draggedFarEnough = distance > pageWidth / 3;
+            //     const draggedFastEnough =
+            //         velocity > 1.5 && distance <= pageWidth / 3;
 
-                // Handle next/prev image from valid drag
-                if (draggedFarEnough || draggedFastEnough) {
-                    const goToIndex = xDir + yDir > 0 ? -1 : 1;
+            //     // Handle next/prev image from valid drag
+            //     if (draggedFarEnough || draggedFastEnough) {
+            //         const goToIndex = xDir + yDir > 0 ? -1 : 1;
 
-                    if (goToIndex > 0) onNext();
-                    else if (goToIndex < 0) onPrev();
-                }
-            },
-            onWheelEnd: () => {
-                set(i => getPagePositions(i, false, 0));
-                setIsDragging(false);
-            },
+            //         if (goToIndex > 0) onNext();
+            //         else if (goToIndex < 0) onPrev();
+            //     }
+            // },
+            // onWheelEnd: () => {
+            //     set(i => getPagePositions(i, false, 0));
+            //     setIsDragging(false);
+            // },
             onDrag: ({
                 down,
                 movement: [xMovement],
