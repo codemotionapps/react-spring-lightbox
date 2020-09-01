@@ -28,6 +28,7 @@ const ImagePager = ({
     onNext,
     onClose,
     renderImageOverlay,
+    renderCustomComponent,
     singleClickToZoom
 }) => {
     const firstRender = useRef(true);
@@ -173,6 +174,7 @@ const ImagePager = ({
             }}
             onClick={() => Math.abs(x.value) < 1 && !disableDrag && onClose()}
         >
+            {renderCustomComponent()}
             <PagerContentWrapper>
                 <PagerInnerContentWrapper>
                     <ImageContainer

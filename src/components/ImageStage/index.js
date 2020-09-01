@@ -25,6 +25,7 @@ const ImageStage = ({
     renderPrevButton,
     renderNextButton,
     renderImageOverlay,
+    renderCustomComponent,
     singleClickToZoom
 }) => {
     // Extra sanity check that the next/prev image exists before moving to it
@@ -32,7 +33,7 @@ const ImageStage = ({
     const canNext = currentIndex + 1 < images.length;
 
     return (
-        <ImageStageContainer className="lightbox-image-stage">
+        <ImageStageContainer className="lightbox-image-stage kur5">
             {renderPrevButton({ canPrev })}
             <ImagePager
                 images={images}
@@ -41,6 +42,7 @@ const ImageStage = ({
                 onNext={onNext}
                 onPrev={onPrev}
                 renderImageOverlay={renderImageOverlay}
+                renderCustomComponent={renderCustomComponent}
                 singleClickToZoom={singleClickToZoom}
             />
             {renderNextButton({ canNext })}
@@ -65,6 +67,7 @@ ImageStage.propTypes = {
     renderPrevButton: PropTypes.func.isRequired,
     renderNextButton: PropTypes.func.isRequired,
     renderImageOverlay: PropTypes.func.isRequired,
+    renderCustomComponent: PropTypes.func.isRequired,
     singleClickToZoom: PropTypes.isRequired
 };
 

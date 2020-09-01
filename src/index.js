@@ -36,6 +36,7 @@ const Lightbox = ({
     renderPrevButton,
     renderNextButton,
     renderImageOverlay,
+    renderCustomComponent,
     className,
     singleClickToZoom,
     style,
@@ -109,6 +110,7 @@ const Lightbox = ({
                     renderPrevButton={renderPrevButton}
                     renderNextButton={renderNextButton}
                     renderImageOverlay={renderImageOverlay}
+                    renderCustomComponent={renderCustomComponent}
                     singleClickToZoom={singleClickToZoom}
                 />
                 {renderFooter()}
@@ -140,6 +142,7 @@ Lightbox.propTypes = {
     style: PropTypes.object,
     pageTransitionConfig: PropTypes.object,
     renderImageOverlay: PropTypes.func,
+    renderCustomComponent: PropTypes.func,
     singleClickToZoom: PropTypes.bool
 };
 
@@ -152,6 +155,7 @@ Lightbox.defaultProps = {
     renderPrevButton: () => null,
     renderNextButton: () => null,
     renderImageOverlay: () => null,
+    renderCustomComponent: () => null,
     singleClickToZoom: false
 };
 
