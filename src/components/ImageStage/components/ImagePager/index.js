@@ -153,14 +153,20 @@ const ImagePager = ({
             event: {
                 passive: true,
                 capture: false
-            }
+            },
+            enabled: Boolean(
+                !images[currentIndex].disableDrag || images.length > 1
+            )
         }
     );
+    console.log(images[currentIndex]);
 
     /**
      * @see https://github.com/react-spring/react-use-gesture#adding-gestures-to-dom-nodes
      */
-    useEffect(bind, [bind, currentIndex]);
+    useEffect(() => {
+        bind();
+    }, [bind, images, currentIndex]);
 
     return props.map(({ x, display }, i) => (
         <AnimatedImagePager
