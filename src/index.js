@@ -73,9 +73,6 @@ const Lightbox = ({
                     case 'ArrowRight':
                         onNext();
                         break;
-                    case 'Escape':
-                        onClose();
-                        break;
                     default:
                         e.preventDefault();
                         break;
