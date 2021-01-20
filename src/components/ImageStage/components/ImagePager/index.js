@@ -180,7 +180,11 @@ const ImagePager = ({
             }}
             onClick={() => Math.abs(x.value) < 1 && !disableDrag && onClose()}
         >
-            {renderCustomComponent()}
+            {renderCustomComponent({
+                attachment: images[i],
+                index: i,
+                currentIndex
+            })}
             <PagerContentWrapper>
                 <PagerInnerContentWrapper>
                     <ImageContainer
