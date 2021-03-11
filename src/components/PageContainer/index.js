@@ -28,20 +28,20 @@ const PageContainer = ({
         config: { ...config.default, mass: 1, tension: 320, friction: 32 }
     };
 
-    const transitions = useTransition(isOpen, {
+    const transition = useTransition(isOpen, {
         ...defaultTransition,
         ...pageTransitionConfig
     });
 
-    return transitions.map(
-        ({ item, key, props }) =>
+    return transition(
+        (style, item, t, key) =>
             item && (
                 <AnimatedPageContainer
                     key={key}
                     className={`lightbox-container${
                         className ? ` ${className}` : ''
                     }`}
-                    style={{ ...props, ...style }}
+                    style={style}
                 >
                     {children}
                 </AnimatedPageContainer>
