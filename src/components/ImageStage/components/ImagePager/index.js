@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSprings, animated } from '@react-spring/web';
+import { useSprings, animated } from 'react-spring';
 import { useGesture } from 'react-use-gesture';
 import styled from 'styled-components';
 import { useWindowSize } from '../../utils';
@@ -159,8 +159,6 @@ const ImagePager = ({
             )
         }
     );
-    console.log(images[currentIndex]);
-
     /**
      * @see https://github.com/react-spring/react-use-gesture#adding-gestures-to-dom-nodes
      */

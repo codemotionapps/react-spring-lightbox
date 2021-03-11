@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useSpring, animated, to, config } from '@react-spring/web';
+import { useSpring, animated, to, config } from 'react-spring';
 import { useGesture } from 'react-use-gesture';
 import styled from 'styled-components';
 import {
