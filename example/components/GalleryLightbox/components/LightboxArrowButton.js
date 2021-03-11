@@ -6,7 +6,7 @@ import { animated, useTransition } from 'react-spring';
 import ButtonControl from './LightboxButtonControl';
 
 const ArrowButton = ({ position, onClick, disabled }) => {
-    const transitions = useTransition(!disabled, null, {
+    const transitions = useTransition(!disabled, {
         from: { opacity: 0 },
         enter: { opacity: 1 },
         leave: { opacity: 0 }

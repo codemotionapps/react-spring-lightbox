@@ -28,7 +28,7 @@ const PageContainer = ({
         config: { ...config.default, mass: 1, tension: 320, friction: 32 }
     };
 
-    const transitions = useTransition(isOpen, null, {
+    const transitions = useTransition(isOpen, {
         ...defaultTransition,
         ...pageTransitionConfig
     });
