@@ -31,7 +31,6 @@ const ImageStage = ({
     // Extra sanity check that the next/prev image exists before moving to it
     const canPrev = currentIndex > 0;
     const canNext = currentIndex + 1 < images.length;
-
     return (
         <ImageStageContainer className="lightbox-image-stage">
             {renderPrevButton({ canPrev })}
