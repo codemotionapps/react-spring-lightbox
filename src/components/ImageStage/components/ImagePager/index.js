@@ -200,7 +200,11 @@ const ImagePager = ({
                             pagerIsDragging={isDragging}
                             singleClickToZoom={singleClickToZoom}
                         />
-                        {renderImageOverlay()}
+                        {renderImageOverlay({
+                            attachment: images[i],
+                            index: i,
+                            currentIndex
+                        })}
                     </ImageContainer>
                 </PagerInnerContentWrapper>
             </PagerContentWrapper>
