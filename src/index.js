@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { ImageStage, PageContainer, CreatePortal } from './components';
 
 /**
@@ -37,6 +38,7 @@ const Lightbox = ({
     renderNextButton,
     renderImageOverlay,
     renderCustomComponent,
+    renderCustomSidebar,
     className,
     singleClickToZoom,
     style,
@@ -98,19 +100,24 @@ const Lightbox = ({
                 pageTransitionConfig={pageTransitionConfig}
             >
                 {renderHeader()}
-                <ImageStage
-                    images={images}
-                    onClose={onClose}
-                    currentIndex={currentIndex}
-                    onPrev={onPrev}
-                    onNext={onNext}
-                    renderPrevButton={renderPrevButton}
-                    renderNextButton={renderNextButton}
-                    renderImageOverlay={renderImageOverlay}
-                    renderCustomComponent={renderCustomComponent}
-                    singleClickToZoom={singleClickToZoom}
-                />
-                {renderFooter()}
+                <div className="view-container">
+                    <ViewContainer>
+                        <ImageStage
+                            images={images}
+                            onClose={onClose}
+                            currentIndex={currentIndex}
+                            onPrev={onPrev}
+                            onNext={onNext}
+                            renderPrevButton={renderPrevButton}
+                            renderNextButton={renderNextButton}
+                            renderImageOverlay={renderImageOverlay}
+                            renderCustomComponent={renderCustomComponent}
+                            singleClickToZoom={singleClickToZoom}
+                        />
+                        {renderFooter()}
+                    </ViewContainer>
+                    {renderCustomSidebar()}
+                </div>
             </PageContainer>
         </CreatePortal>
     );
@@ -140,6 +147,7 @@ Lightbox.propTypes = {
     pageTransitionConfig: PropTypes.object,
     renderImageOverlay: PropTypes.func,
     renderCustomComponent: PropTypes.func,
+    renderCustomSidebar: PropTypes.func,
     singleClickToZoom: PropTypes.bool
 };
 
@@ -153,7 +161,20 @@ Lightbox.defaultProps = {
     renderNextButton: () => null,
     renderImageOverlay: () => null,
     renderCustomComponent: () => null,
+    renderCustomSidebar: () => null,
     singleClickToZoom: false
 };
+
+const ViewContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 400;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+`;
 
 export default Lightbox;
