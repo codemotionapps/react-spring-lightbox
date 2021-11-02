@@ -176,7 +176,8 @@ const ImagePager = ({
                 display,
                 transform: x.to(xInterp => `translateX(${xInterp}px)`)
             }}
-            onClick={() => Math.abs(x.value) < 1 && !disableDrag && onClose()}
+            onClick={onClose}
+            // onClick={() => Math.abs(x.goal) < 1 && !disableDrag && onClose()}
         >
             {renderCustomComponent({
                 attachment: images[i],

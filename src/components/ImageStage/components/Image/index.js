@@ -95,8 +95,8 @@ const Image = ({
 
                 // Speed up pinch zoom when using mouse versus touch
                 const SCALE_FACTOR = ctrlKey ? 1000 : 250;
-                const pinchScale = scale.value + xMovement / SCALE_FACTOR;
-                const pinchDelta = pinchScale - scale.value;
+                const pinchScale = scale.goal + xMovement / SCALE_FACTOR;
+                const pinchDelta = pinchScale - scale.goal;
                 const { clientX, clientY } = event;
 
                 // Calculate the amount of x, y translate offset needed to
@@ -106,9 +106,9 @@ const Image = ({
                     newTranslateY
                 ] = getTranslateOffsetsFromScale({
                     imageRef,
-                    scale: scale.value,
+                    scale: scale.goal,
                     pinchDelta,
-                    currentTranslate: [translateX.value, translateY.value],
+                    currentTranslate: [translateX.goal, translateY.goal],
                     // Use the [x, y] coords of mouse if a trackpad or ctrl + wheel event
                     // Otherwise use touch origin
                     touchOrigin: ctrlKey
@@ -128,7 +128,7 @@ const Image = ({
                     });
             },
             onPinchEnd: () => {
-                if (scale.value > 1) setDisableDrag(true);
+                if (scale.goal > 1) setDisableDrag(true);
                 else set(defaultImageTransform);
                 setIsPanningImage(false);
             },
@@ -146,15 +146,15 @@ const Image = ({
                     setIsPanningImage(true);
 
                 if (event.touches && event.touches.length > 1) return;
-                if (pinching || scale.value <= 1) return;
+                if (pinching || scale.goal <= 1) return;
 
                 // Prevent dragging image out of viewport
-                if (scale.value > 1 && imageIsOutOfBounds(imageRef)) cancel();
+                if (scale.goal > 1 && imageIsOutOfBounds(imageRef)) cancel();
                 else {
                     if (first) {
                         return {
-                            initialTranslateX: translateX.value,
-                            initialTranslateY: translateY.value
+                            initialTranslateX: translateX.goal,
+                            initialTranslateY: translateY.goal
                         };
                     }
 
@@ -194,24 +194,24 @@ const Image = ({
             }
 
             // If tapped while already zoomed-in, zoom out to default scale
-            if (scale.value !== 1) {
+            if (scale.goal !== 1) {
                 set(defaultImageTransform);
                 return;
             }
 
             // Zoom-in to origin of click on image
             const { clientX: touchOriginX, clientY: touchOriginY } = e;
-            const pinchScale = scale.value + 1;
-            const pinchDelta = pinchScale - scale.value;
+            const pinchScale = scale.goal + 1;
+            const pinchDelta = pinchScale - scale.goal;
 
             // Calculate the amount of x, y translate offset needed to
             // zoom-in to point as image scale grows
             const [newTranslateX, newTranslateY] = getTranslateOffsetsFromScale(
                 {
                     imageRef,
-                    scale: scale.value,
+                    scale: scale.goal,
                     pinchDelta,
-                    currentTranslate: [translateX.value, translateY.value],
+                    currentTranslate: [translateX.goal, translateY.goal],
                     touchOrigin: [touchOriginX, touchOriginY]
                 }
             );
