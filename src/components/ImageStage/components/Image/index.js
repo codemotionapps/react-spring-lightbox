@@ -6,7 +6,8 @@ import styled from 'styled-components';
 import {
     useDoubleClick,
     imageIsOutOfBounds,
-    getTranslateOffsetsFromScale
+    getTranslateOffsetsFromScale,
+    getMagnifierValue
 } from '../../utils';
 
 /**
@@ -24,6 +25,7 @@ import {
  * @see https://github.com/react-spring/react-spring
  */
 const Image = ({
+    image,
     src,
     alt,
     pagerHeight,
@@ -34,6 +36,7 @@ const Image = ({
 }) => {
     const [isPanningImage, setIsPanningImage] = useState(false);
     const imageRef = useRef();
+    const ratio = image.pictureHeight / image.pictureWidth;
     const defaultImageTransform = () => ({
         scale: 1,
         translateX: 0,
@@ -200,8 +203,9 @@ const Image = ({
             }
 
             // Zoom-in to origin of click on image
+            const magnifierValue = ratio > 2 ? getMagnifierValue(ratio) : 1;
             const { clientX: touchOriginX, clientY: touchOriginY } = e;
-            const pinchScale = scale.goal + 1;
+            const pinchScale = scale.goal + magnifierValue;
             const pinchDelta = pinchScale - scale.goal;
 
             // Calculate the amount of x, y translate offset needed to
@@ -259,6 +263,7 @@ const Image = ({
 
 Image.propTypes = {
     /* The source URL of this image */
+    image: PropTypes.object.isRequired,
     src: PropTypes.string.isRequired,
     /* The alt attribute for this image */
     alt: PropTypes.string.isRequired,
