@@ -25,6 +25,16 @@ import {
  * @see https://github.com/react-spring/react-spring
  */
 
+const supportedImageFiles = [
+    'webp',
+    'png',
+    'jpg',
+    'jpeg',
+    'gif',
+    'svg',
+    'bmp',
+]
+
 const Annotations = ({ annotations, renderAnnotation, store }) => {
     const getScale = () => {
         return { scale: 0.5 };
@@ -297,7 +307,9 @@ const Image = ({
                 }}
                 className="image-container"
             >
-                {isAnnotating && isCurrentImage ? (
+                {supportedImageFiles.includes(image.fileType) &&
+                    isAnnotating
+                    && isCurrentImage ? (
                     <Annotations
                         rerender
                         annotations={annotations}
