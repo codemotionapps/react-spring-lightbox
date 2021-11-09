@@ -42,7 +42,11 @@ const Lightbox = ({
     className,
     singleClickToZoom,
     style,
-    pageTransitionConfig
+    pageTransitionConfig,
+    isAnnotating,
+    renderAnnotation,
+    overlayClick,
+    annotations
 }) => {
     // Handle event listeners for keyboard
     useEffect(() => {
@@ -103,6 +107,9 @@ const Lightbox = ({
                 <div className="view-container">
                     <ViewContainer>
                         <ImageStage
+                            annotations={annotations}
+                            overlayClick={overlayClick}
+                            isAnnotating={isAnnotating}
                             images={images}
                             onClose={onClose}
                             currentIndex={currentIndex}
@@ -113,6 +120,7 @@ const Lightbox = ({
                             renderImageOverlay={renderImageOverlay}
                             renderCustomComponent={renderCustomComponent}
                             singleClickToZoom={singleClickToZoom}
+                            renderAnnotation={renderAnnotation}
                         />
                         {renderFooter()}
                     </ViewContainer>
@@ -148,7 +156,11 @@ Lightbox.propTypes = {
     renderImageOverlay: PropTypes.func,
     renderCustomComponent: PropTypes.func,
     renderCustomSidebar: PropTypes.func,
-    singleClickToZoom: PropTypes.bool
+    singleClickToZoom: PropTypes.bool,
+    isAnnotating: PropTypes.bool.isRequired,
+    renderAnnotation: PropTypes.func.isRequired,
+    overlayClick: PropTypes.func.isRequired,
+    annotations: PropTypes.object.isRequired
 };
 
 Lightbox.defaultProps = {

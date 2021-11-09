@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useSpring, animated, to, config } from 'react-spring';
+import { useSpring, useSprings, animated, to, config } from 'react-spring';
 import { useGesture } from 'react-use-gesture';
 import styled from 'styled-components';
 import {
@@ -24,6 +24,46 @@ import {
  * @see https://github.com/react-spring/react-use-gesture
  * @see https://github.com/react-spring/react-spring
  */
+
+const Annotations = ({ annotations, renderAnnotation, store }) => {
+    const getScale = () => {
+        return { scale: 0.5 };
+    };
+    const [props, api] = useSprings(annotations.length, getScale);
+    useEffect(() => {
+        api(getScale);
+    }, [api]);
+
+    return (
+        <div className="annotations-container">
+            {props?.map(({ scale }, i) => {
+                const style = {
+                    top: `${annotations[i].top}%`,
+                    left: `${annotations[i].left}%`,
+                    width: 20,
+                    height: 20,
+                    zIndex: 3,
+                    position: 'absolute'
+                };
+                return (
+                    <animated.div
+                        className="animated-annotation"
+                        style={{
+                            transform: to([scale], s => `scale(${s})`)
+                        }}
+                    >
+                        {renderAnnotation({
+                            annotation: annotations[i],
+                            store,
+                            style
+                        })}
+                    </animated.div>
+                );
+            })}
+        </div>
+    );
+};
+
 const Image = ({
     image,
     src,
@@ -32,8 +72,13 @@ const Image = ({
     isCurrentImage,
     setDisableDrag,
     singleClickToZoom,
-    pagerIsDragging
+    pagerIsDragging,
+    isAnnotating,
+    renderAnnotation,
+    overlayClick,
+    annotations
 }) => {
+    const imageContainerRef = useRef();
     const [isPanningImage, setIsPanningImage] = useState(false);
     const imageRef = useRef();
     const ratio = image.pictureHeight / image.pictureWidth;
@@ -135,7 +180,10 @@ const Image = ({
                 else set(defaultImageTransform);
                 setIsPanningImage(false);
             },
-            onDragEnd: () => setIsPanningImage(false),
+            onDragEnd: () =>
+                setTimeout(() => {
+                    setIsPanningImage(false);
+                }, 0),
             onDrag: ({
                 movement: [xMovement, yMovement],
                 pinching,
@@ -234,35 +282,76 @@ const Image = ({
     });
 
     return (
-        <AnimatedImage
-            ref={imageRef}
-            className="lightbox-image"
-            style={{
-                transform: to(
-                    [scale, translateX, translateY],
-                    (s, x, y) => `translate(${x}px, ${y}px) scale(${s})`
-                ),
-                maxHeight: pagerHeight,
-                ...(isCurrentImage && { willChange: 'transform' })
-            }}
-            src={src}
-            alt={alt}
-            draggable="false"
-            onDragStart={e => {
-                // Disable image ghost dragging in firefox
-                e.preventDefault();
-            }}
-            onClick={e => {
-                // Don't close lighbox when clicking image
-                e.stopPropagation();
-                e.nativeEvent.stopImmediatePropagation();
-            }}
-        />
+        <>
+            <AnimatedImageContainer
+                ref={imageContainerRef}
+                style={{
+                    border: isAnnotating ? '3px solid #fdad1b' : '',
+                    cursor: isAnnotating ? 'crosshair' : '',
+                    transform: to(
+                        [scale, translateX, translateY],
+                        (s, x, y) => `translate(${x}px, ${y}px) scale(${s})`
+                    ),
+                    maxHeight: pagerHeight,
+                    ...(isCurrentImage && { willChange: 'transform' })
+                }}
+                className="image-container"
+            >
+                {isAnnotating && isCurrentImage ? (
+                    <Annotations
+                        rerender
+                        annotations={annotations}
+                        isCurrentImage={isCurrentImage}
+                        renderAnnotation={renderAnnotation}
+                        store={image.imageAnnotationStore}
+                    />
+                ) : null}
+                <AnimatedImage
+                    ref={imageRef}
+                    className="lightbox-image"
+                    style={{
+                        cursor: isAnnotating ? 'crosshair' : '',
+                        transform: to(
+                            [scale, translateX, translateY],
+                            (s, x, y) => `translate(${x}px, ${y}px) scale(${s})`
+                        ),
+                        maxHeight: pagerHeight,
+                        ...(isCurrentImage && { willChange: 'transform' })
+                    }}
+                    src={src}
+                    alt={alt}
+                    draggable="false"
+                    onDragStart={e => {
+                        // Disable image ghost dragging in firefox
+                        e.preventDefault();
+                    }}
+                    onClick={e => {
+                        // Don't close lighbox when clicking image
+                        e.stopPropagation();
+                        e.nativeEvent.stopImmediatePropagation();
+                        if (isAnnotating) {
+                            if (e.ctrlKey || e.metaKey || isPanningImage) {
+                                return;
+                            }
+                            overlayClick(e);
+                        }
+                    }}
+                />
+            </AnimatedImageContainer>
+        </>
     );
+};
+
+Annotations.propTypes = {
+    annotations: PropTypes.array.isRequired,
+    renderAnnotation: PropTypes.func.isRequired,
+    store: PropTypes.object.isRequired
 };
 
 Image.propTypes = {
     /* The source URL of this image */
+    renderAnnotation: PropTypes.bool.isRequired,
+    isAnnotating: PropTypes.bool.isRequired,
     image: PropTypes.object.isRequired,
     src: PropTypes.string.isRequired,
     /* The alt attribute for this image */
@@ -276,10 +365,22 @@ Image.propTypes = {
     /* Overrides the default behavior of double clicking causing an image zoom to a single click */
     singleClickToZoom: PropTypes.bool.isRequired,
     /* Indicates parent ImagePager is in a state of dragging, if true click to zoom is disabled */
-    pagerIsDragging: PropTypes.bool.isRequired
+    pagerIsDragging: PropTypes.bool.isRequired,
+    overlayClick: PropTypes.func.isRequired,
+    annotations: PropTypes.object.isRequired
 };
 
 export default Image;
+
+const AnimatedImageContainer = styled(animated.div)`
+    z-index: 1200;
+    width: auto;
+    max-width: 100%;
+    user-select: none;
+    ::selection {
+        background: none;
+    }
+`;
 
 const AnimatedImage = styled(animated.img)`
     width: auto;

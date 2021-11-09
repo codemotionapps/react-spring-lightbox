@@ -29,7 +29,11 @@ const ImagePager = ({
     onClose,
     renderImageOverlay,
     renderCustomComponent,
-    singleClickToZoom
+    singleClickToZoom,
+    isAnnotating,
+    renderAnnotation,
+    overlayClick,
+    annotations
 }) => {
     const firstRender = useRef(true);
     const imageStageRef = useRef(
@@ -192,6 +196,10 @@ const ImagePager = ({
                         }}
                     >
                         <Image
+                            annotations={annotations}
+                            overlayClick={overlayClick}
+                            renderAnnotation={renderAnnotation}
+                            isAnnotating={isAnnotating}
                             image={images[i]}
                             setDisableDrag={setDisableDrag}
                             src={images[i].src}
@@ -236,7 +244,8 @@ ImagePager.propTypes = {
     /* Fixed height of the image stage, used to restrict maximum height of images */
     pagerHeight: PropTypes.number.isRequired,
     /* Overrides the default behavior of double clicking causing an image zoom to a single click */
-    singleClickToZoom: PropTypes.isRequired
+    singleClickToZoom: PropTypes.isRequired,
+    annotations: PropTypes.object.isRequired
 };
 
 export default ImagePager;

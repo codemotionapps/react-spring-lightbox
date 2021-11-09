@@ -26,7 +26,11 @@ const ImageStage = ({
     renderNextButton,
     renderImageOverlay,
     renderCustomComponent,
-    singleClickToZoom
+    singleClickToZoom,
+    isAnnotating,
+    renderAnnotation,
+    overlayClick,
+    annotations
 }) => {
     // Extra sanity check that the next/prev image exists before moving to it
     const canPrev = currentIndex > 0;
@@ -35,6 +39,9 @@ const ImageStage = ({
         <ImageStageContainer className="lightbox-image-stage">
             {renderPrevButton({ canPrev })}
             <ImagePager
+                annotations={annotations}
+                overlayClick={overlayClick}
+                isAnnotating={isAnnotating}
                 images={images}
                 currentIndex={currentIndex}
                 onClose={onClose}
@@ -42,6 +49,7 @@ const ImageStage = ({
                 onPrev={onPrev}
                 renderImageOverlay={renderImageOverlay}
                 renderCustomComponent={renderCustomComponent}
+                renderAnnotation={renderAnnotation}
                 singleClickToZoom={singleClickToZoom}
             />
             {renderNextButton({ canNext })}
@@ -67,7 +75,11 @@ ImageStage.propTypes = {
     renderNextButton: PropTypes.func.isRequired,
     renderImageOverlay: PropTypes.func.isRequired,
     renderCustomComponent: PropTypes.func.isRequired,
-    singleClickToZoom: PropTypes.isRequired
+    singleClickToZoom: PropTypes.isRequired,
+    isAnnotating: PropTypes.bool.isRequired,
+    renderAnnotation: PropTypes.func.isRequired,
+    overlayClick: PropTypes.func.isRequired,
+    annotations: PropTypes.object.isRequired
 };
 
 export default ImageStage;
