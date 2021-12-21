@@ -26,6 +26,13 @@ import {
  */
 
 const supportedImageFiles = [
+    'image/webp',
+    'image/png',
+    'image/jpg',
+    'image/jpeg',
+    'image/gif',
+    'image/svg',
+    'image/bmp',
     'webp',
     'png',
     'jpg',
